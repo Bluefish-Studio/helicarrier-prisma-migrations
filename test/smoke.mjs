@@ -13,7 +13,12 @@ assert.equal(response.headers.get('x-robots-tag'), 'noindex, nofollow');
 const body = await response.json();
 assert.equal(body.notes.length, 3);
 assert.deepEqual(body.notes.map(n => n.id), [1, 2, 3]);
-assert.ok(body.notes.every(n => n.summary === null || typeof n.summary === 'string'));
+if (body.stage === '03 · Compatible expansion') {
+  assert.deepEqual(body.notes.map(n => n.summary), ['Deploy from a Git repository.', 'Connect PostgreSQL through a private reference.', 'Apply reviewed migrations before switching traffic.']);
+} else {
+  assert.equal(body.stage, '01 · Base schema');
+  assert.ok(body.notes.every(n => n.summary === null));
+}
 assert.equal((await fetch(`${base}/api/notes`, { method: 'POST' })).status, 405);
 assert.equal((await fetch(`${base}/.env`)).status, 404);
 assert.equal((await fetch(`${base}/`, { method: 'HEAD' })).status, 200);
