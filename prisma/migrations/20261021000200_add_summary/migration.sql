@@ -1,4 +1,10 @@
--- Deliberately invalid for a populated table. Use only the disposable guide DB.
 BEGIN;
-ALTER TABLE "guide_release_notes" ADD COLUMN "summary" TEXT NOT NULL;
+ALTER TABLE "guide_release_notes" ADD COLUMN "summary" TEXT;
+UPDATE "guide_release_notes"
+SET "summary" = CASE "id"
+  WHEN 1 THEN 'Deploy from a Git repository.'
+  WHEN 2 THEN 'Connect PostgreSQL through a private reference.'
+  WHEN 3 THEN 'Apply reviewed migrations before switching traffic.'
+END
+WHERE "id" IN (1, 2, 3);
 COMMIT;

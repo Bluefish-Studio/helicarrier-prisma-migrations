@@ -1,1 +1,1 @@
-export const stage = '02 · Intentionally failed release';
+export const stage = '03 · Compatible expansion';
