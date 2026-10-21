@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="theme-color" content="#08090b">
+  <title>Migration board · Helicarrier tutorial</title>
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="/mark.svg" type="image/svg+xml">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header><a href="https://helicarrier.cloud/"><img class="brand-mark" src="/mark.svg" width="38" height="20" alt="">Helicarrier<span class="label">Tutorials</span></a><span class="label">PRISMA + POSTGRESQL</span></header>
+  <main>
+    <div class="eyebrow"><span class="dot"></span> A RELEASE YOU CAN INSPECT</div>
+    <h1>Keep the data.<br><span>Move the schema forward.</span></h1>
+    <p class="intro">Three records, one database, and a migration between releases. This board reads the current schema so you can verify what changed.</p>
+    <section class="board" aria-labelledby="records-title">
+      <div class="board-head"><div><h2 id="records-title">Release notes</h2><p>Fictional records stored in PostgreSQL</p></div><span id="status" role="status">Connecting…</span></div>
+      <div class="facts"><div><span>RUNNING VERSION</span><strong id="stage">Checking…</strong></div><div><span>SAMPLE RECORDS</span><strong id="count">—</strong></div><div><span>SCHEMA EXPANSION</span><strong id="expansion">Checking…</strong></div></div>
+      <ol id="notes"></ol>
+      <p id="error" hidden>The database is not ready. Check the private reference and release migration, then reload.</p>
+      <div class="board-foot"><span>Read-only demo · no public writes</span><span>Node.js 22 / Prisma 7</span></div>
+    </section>
+    <aside><span class="step">01</span><div><strong>Observe the release, then verify the data.</strong><p>A successful page request confirms the running app can read these records. Use the deployment log and migration history to verify the migration itself.</p></div></aside>
+  </main>
+  <footer>A disposable learning project. No customer data.</footer>
+</body>
+</html>

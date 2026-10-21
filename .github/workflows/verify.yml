@@ -1,0 +1,48 @@
+name: Verify Prisma migration example
+on:
+  push:
+    branches: [main]
+  pull_request: {}
+  workflow_dispatch: {}
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:16-bookworm
+        env:
+          POSTGRES_USER: guide
+          POSTGRES_PASSWORD: disposable-ci-only
+          POSTGRES_DB: helicarrier_prisma_guide
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U guide -d helicarrier_prisma_guide"
+          --health-interval 5s --health-timeout 3s --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Build without database credentials
+        run: npm run build
+      - name: Verify migration failure and recovery
+        env:
+          TEST_DATABASE_URL: postgresql://guide:disposable-ci-only@127.0.0.1:5432/helicarrier_prisma_guide
+        run: npm test
+      - name: Build deployment image
+        run: docker build --tag helicarrier-prisma:test .
+      - name: Verify migrations and read-only runtime
+        env:
+          DATABASE_URL: postgresql://guide:disposable-ci-only@127.0.0.1:5432/helicarrier_prisma_guide
+        run: |
+          docker run --rm --network host --read-only --tmpfs /tmp --tmpfs /run --env DATABASE_URL helicarrier-prisma:test npm run db:migrate
+          docker run --detach --rm --name helicarrier-prisma-check --network host --read-only --tmpfs /tmp --tmpfs /run --env DATABASE_URL helicarrier-prisma:test
+          node test/smoke.mjs
+      - name: Remove test application
+        if: always()
+        run: docker rm --force helicarrier-prisma-check 2>/dev/null || true

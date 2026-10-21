@@ -1,0 +1,9 @@
+.git
+node_modules
+dist
+src/generated
+.test-runs
+.env
+.env.*
+*.log
+test
