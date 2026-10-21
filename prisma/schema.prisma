@@ -13,6 +13,7 @@ datasource db {
 model ReleaseNote {
   id Int @id
   title String
+  summary String?
 
   @@map("guide_release_notes")
 }

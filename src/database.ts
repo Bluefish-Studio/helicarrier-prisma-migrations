@@ -9,7 +9,7 @@ export async function readNotes() {
   const rows = await prisma.releaseNote.findMany({
     where: { id: { in: [1, 2, 3] } },
     orderBy: { id: 'asc' },
-    select: { id: true, title: true },
+    select: { id: true, title: true, summary: true },
   });
-  return rows.map(row => ({ ...row, summary: null as string | null }));
+  return rows;
 }
